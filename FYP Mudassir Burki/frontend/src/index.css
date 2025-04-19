@@ -1,0 +1,79 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.input-form{
+  padding: 10px;
+  border: 1px solid;
+}
+
+.form-control{
+  padding: 5px;
+  margin: 3px;
+  border-radius: 5px;
+}
+
+.weather-body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  text-align: center;
+  padding: 30px;
+  min-height: 100vh;
+}
+
+.weather-container {
+  width: 50%;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.weather-input,
+.weather-button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  width: 90%;
+}
+
+.weather-button {
+  background: #27ae60;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.weather-button:hover {
+  background: #2ecc71;
+}
+
+.weather-result {
+  margin-top: 20px;
+  padding: 10px;
+  background: #ecf0f1;
+  border-radius: 5px;
+}
+
+.suitable {
+  color: green;
+  font-weight: bold;
+}
+
+.not-suitable {
+  color: red;
+  font-weight: bold;
+}
