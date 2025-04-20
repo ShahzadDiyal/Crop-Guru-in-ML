@@ -27,6 +27,12 @@ const home = () => {
         Wheather based advisor
         </Link>
       </div>
+      <div className="col-md-6" style={{border:"1px solid",borderRadius:"25px",padding:"20px"}}>
+        <h3> Fertilizer Suggestions</h3>
+        <Link to="/fertilizersuggestion" className="btn btn-primary">
+        Fertilizer suggestion
+        </Link>
+      </div>
      
     </div>
   )

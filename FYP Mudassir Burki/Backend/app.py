@@ -2,6 +2,8 @@ from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 import os
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import joblib
 import pickle
 from PIL import Image
@@ -328,6 +330,78 @@ def predict():
         return jsonify(result)
     
 
+
+
+# Fertilizer Suggestions
+# Load fertilizer dataset
+fertilizer_df = pd.read_csv("csv-files/fertilizer_df.csv")
+fertilizer_df['Crop'] = fertilizer_df['Crop'].str.lower()
+
+# Fertilizer recommendation dictionary
+fertilizer_dict = {
+    'NHigh': "🌿 Too Much Nitrogen! Avoid high-nitrogen fertilizers, plant nitrogen-fixing crops, etc.",
+    'Nlow': "🌱 Low Nitrogen! Apply compost, manure, high-nitrogen fertilizers, etc.",
+    'PHigh': "🪴 Too Much Phosphorus! Avoid manure, use phosphorus-free fertilizers, etc.",
+    'Plow': "💧 Low Phosphorus! Add bone meal, use high-phosphorus fertilizers, etc.",
+    'KHigh': "🔥 Too Much Potassium! Stop potassium fertilizers, leach excess with water, etc.",
+    'Klow': "🍂 Low Potassium! Apply potassium-rich fertilizers, use banana peels, etc."
+}
+
+@app.route("/get-crops", methods=["GET"])
+def get_crops():
+    crops = fertilizer_df["Crop"].unique().tolist()
+    return jsonify({"crops": crops})
+
+@app.route("/fertilizer-suggestion", methods=["POST"])
+def recommend_fertilizer():
+    try:
+        data = request.json
+        crop = data["crop"].lower()
+        N = float(data["N"])
+        P = float(data["P"])
+        K = float(data["K"])
+
+        crop_data = fertilizer_df[fertilizer_df["Crop"] == crop]
+        if crop_data.empty:
+            return jsonify({"error": "Crop not found"}), 404
+
+        ideal_N, ideal_P, ideal_K = crop_data.iloc[0][["N", "P", "K"]]
+        N_diff = ideal_N - N
+        P_diff = ideal_P - P
+        K_diff = ideal_K - K
+
+        nutrient_status = {
+            "Nitrogen": "High" if N_diff < 0 else ("Low" if N_diff > 0 else "Normal"),
+            "Phosphorus": "High" if P_diff < 0 else ("Low" if P_diff > 0 else "Normal"),
+            "Potassium": "High" if K_diff < 0 else ("Low" if K_diff > 0 else "Normal")
+        }
+
+        recommendations = []
+        if nutrient_status["Nitrogen"] != "Normal":
+            key = "NHigh" if N_diff < 0 else "Nlow"
+            recommendations.append({"nutrient": "Nitrogen", "status": nutrient_status["Nitrogen"], "advice": fertilizer_dict[key]})
+        if nutrient_status["Phosphorus"] != "Normal":
+            key = "PHigh" if P_diff < 0 else "Plow"
+            recommendations.append({"nutrient": "Phosphorus", "status": nutrient_status["Phosphorus"], "advice": fertilizer_dict[key]})
+        if nutrient_status["Potassium"] != "Normal":
+            key = "KHigh" if K_diff < 0 else "Klow"
+            recommendations.append({"nutrient": "Potassium", "status": nutrient_status["Potassium"], "advice": fertilizer_dict[key]})
+
+        if recommendations:
+            return jsonify({
+                "crop": crop.capitalize(),
+                "status": "adjustments needed",
+                "recommendations": recommendations
+            })
+        else:
+            return jsonify({
+                "crop": crop.capitalize(),
+                "status": "balanced",
+                "message": f"✅ Your soil has balanced NPK levels for {crop.capitalize()}."
+            })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True)
 

@@ -1,0 +1,12 @@
+flask
+numpy
+pandas
+scikit-learn
+requests
+matplotlib
+seaborn
+torch
+torchvision
+pillow
+werkzeug
+jinja2

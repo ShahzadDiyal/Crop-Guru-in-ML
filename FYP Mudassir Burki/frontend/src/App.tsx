@@ -5,6 +5,7 @@ import CropRecommendation from './pages/cropRecommendation';
 import DiseasePredictions from './pages/diseasePredictions';
 import CropYieldPredictionForm from './pages/cropYieldPrediction';
 import WheatherBasedAdvisor from './pages/wheatherbasedadvisor';
+import FertilizerSuggestions from './pages/fertilizerSuggestion';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/diseasePredictor" element={<DiseasePredictions />} />
         <Route path="/cropyieldprediction" element={<CropYieldPredictionForm />} />
         <Route path="/wheatherbasedadvisor" element={<WheatherBasedAdvisor />} />
+        <Route path="/fertilizersuggestion" element={<FertilizerSuggestions />} />
       </Routes>
     </Router>
   );
